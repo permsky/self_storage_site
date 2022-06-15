@@ -3,4 +3,4 @@ from django.apps import AppConfig
 
 class StarageManagerConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'starage_manager'
+    name = 'storage_manager'
