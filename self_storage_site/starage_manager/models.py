@@ -23,8 +23,15 @@ class BoxPlace(models.Model):
 
 class BoxVolume(models.Model):
     volume = models.FloatField(
-        'Объем бокса',
+        'Объем бокса в кубометрах',
         validators=[MinValueValidator(0.0)])
+
+    class Meta:
+        verbose_name = 'Объём бокса'
+        verbose_name_plural = 'Объёмы боксов'
+
+    def __str__(self):
+        return self.volume
 
 
 class Box(models.Model):
