@@ -13,6 +13,13 @@ class BoxPlace(models.Model):
         default=1)
     note = models.CharField('Пимечание', max_length=100, blank=True)
 
+    class Meta:
+        verbose_name = 'Ангар для боксов'
+        verbose_name_plural = 'Ангары для боксов'
+
+    def __str__(self):
+        return self.name
+
 
 class BoxVolume(models.Model):
     volume = models.FloatField(
