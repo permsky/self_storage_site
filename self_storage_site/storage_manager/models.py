@@ -12,6 +12,8 @@ class BoxPlace(models.Model):
         'Общее количество боксов',
         default=1)
     note = models.CharField('Пимечание', max_length=100, blank=True)
+    image = models.ImageField(
+        'Изображение', upload_to='boxplaces', null=True, blank=True)
 
     class Meta:
         verbose_name = 'Ангар для боксов'
