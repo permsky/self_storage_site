@@ -31,7 +31,7 @@ class BoxVolume(models.Model):
         verbose_name_plural = 'Объёмы боксов'
 
     def __str__(self):
-        return self.volume
+        return str(self.volume)
 
 
 class Box(models.Model):
@@ -45,7 +45,14 @@ class Box(models.Model):
         on_delete=models.PROTECT,
         related_name='place_boxes',
         verbose_name='Где находится')
-    tariff = models.PositiveIntegerField('Цена аренды в месяц')
+    tariff = models.PositiveIntegerField('Цена аренды в месяц руб.')
+
+    class Meta:
+        verbose_name = 'Бокс'
+        verbose_name_plural = 'Боксы'
+
+    def __str__(self):
+        return f'Бокс {self.pk} объёмом {self.box_volume} по адресу {self.boxes_place}'
 
 
 class RentalTime(models.Model):
