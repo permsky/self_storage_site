@@ -5,3 +5,5 @@ env
 .vscode
 # pycharm config files
 .idea
+.DS_Store
+
