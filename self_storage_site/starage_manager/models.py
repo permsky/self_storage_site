@@ -35,7 +35,14 @@ class Box(models.Model):
 
 
 class RentalTime(models.Model):
-    time_intervals = models.PositiveIntegerField('Тариф в месяцах')
+    time_intervals = models.PositiveIntegerField('Время аренды в месяцах')
+
+    class Meta:
+        verbose_name = 'Время аренды в месяцах'
+        verbose_name_plural = 'Время аренды в месяцах'
+
+    def __str__(self):
+        return str(self.time_intervals)
 
 
 class Order(models.Model):
