@@ -3,7 +3,7 @@ env
 *.sqlite3
 *__pycache__
 .vscode
+.DS_Store
 # pycharm config files
 .idea
-.DS_Store
 
