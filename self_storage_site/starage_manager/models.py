@@ -79,3 +79,10 @@ class Order(models.Model):
     start_date = models.DateTimeField('заказ от', auto_now_add=True)
     end_date = models.DateTimeField('заказ до')
     key = models.PositiveIntegerField('Ключ доступа')
+
+    class Meta:
+        verbose_name = 'Заказ'
+        verbose_name_plural = 'Заказы'
+
+    def __str__(self):
+        return f'Заказ {self.pk} клиента {self.customer.first_name} от {str(self.start_date)}'
