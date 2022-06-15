@@ -38,8 +38,9 @@ class Box(models.Model):
     box_volume = models.ForeignKey(
         BoxVolume,
         on_delete=models.PROTECT,
-        related_name='boxes',)
-    in_use = models.BooleanField()
+        related_name='boxes',
+        verbose_name='Объём бокса')
+    in_use = models.BooleanField('Бокс использован')
     boxes_place = models.ForeignKey(
         BoxPlace,
         on_delete=models.PROTECT,
@@ -70,12 +71,17 @@ class Order(models.Model):
     customer = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='users_orders')
+        related_name='users_orders',
+        verbose_name='Имя клиента')
     box = models.OneToOneField(
         Box,
         on_delete=models.PROTECT,
-        related_name='box_orders',)
-    rental_time = models.ForeignKey(RentalTime, on_delete=models.PROTECT, )
+        related_name='box_orders',
+        verbose_name='Использованный бокс')
+    rental_time = models.ForeignKey(
+        RentalTime,
+        on_delete=models.PROTECT,
+        verbose_name='Время аренды')
     start_date = models.DateTimeField('заказ от', auto_now_add=True)
     end_date = models.DateTimeField('заказ до')
     key = models.PositiveIntegerField('Ключ доступа')
