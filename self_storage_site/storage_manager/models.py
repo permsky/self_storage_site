@@ -109,8 +109,8 @@ class Order(models.Model):
         RentalTime,
         on_delete=models.PROTECT,
         verbose_name='Время аренды')
-    start_date = models.DateTimeField('заказ от', auto_now_add=True)
-    end_date = models.DateTimeField('заказ до')
+    start_date = models.DateField('заказ от')
+    end_date = models.DateField('заказ до')
     access_code = models.PositiveIntegerField('код доступа к ячейке', default=213456789)
     status = models.CharField(
         'статус заказа',

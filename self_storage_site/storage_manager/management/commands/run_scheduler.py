@@ -14,7 +14,7 @@ class Command(BaseCommand):
         self.stdout.write(self.style.NOTICE('Preparing scheduler'))
         scheduler = BlockingScheduler(timezone=pytz.UTC)
         every_day_at_01_00_utc = CronTrigger(
-            hour=21, minute=16,
+            hour=19, minute=42,
             timezone=pytz.UTC
         )
         scheduler.add_job(start_jobs, every_day_at_01_00_utc)
