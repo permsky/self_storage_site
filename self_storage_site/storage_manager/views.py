@@ -7,4 +7,5 @@ def register(request):
 
 
 def index(request):
+    #print(request.__dict__)
     return render(request, 'index.html')
