@@ -91,9 +91,9 @@ class RentalTime(models.Model):
 
 class Order(models.Model):
     STATUSES = [
-        (1, 'active'),
-        (2, 'expired'),
-        (3, 'closed')
+        ('active', 'active'),
+        ('expired', 'expired'),
+        ('closed', 'closed')
     ]
     customer = models.ForeignKey(
         User,
@@ -128,21 +128,21 @@ class Order(models.Model):
 
 class Job(models.Model):
     STATUSES = [
-        (1, 'new'),
-        (2, 'ready'),
-        (3, 'done')
+        ('new', 'new'),
+        ('ready', 'ready'),
+        ('done', 'done')
     ]
     INTERVALS=[
-        (1, 'месяц'),
-        (2, '2 недели'),
-        (3, '1 неделю'),
-        (4, '3 дня'),
-        (5, '6 месяцев'),
-        (6, '5 месяцев'),
-        (7, '4 месяца'),
-        (8, '3 месяца'),
-        (9, '2 месяца'),
-        (10, '1 месяц'),
+        ('месяц', 'месяц'),
+        ('2 недели', '2 недели'),
+        ('1 неделю', '1 неделю'),
+        ('3 дня', '3 дня'),
+        ('6 месяцев', '6 месяцев'),
+        ('5 месяцев', '5 месяцев'),
+        ('4 месяца', '4 месяца'),
+        ('3 месяца', '3 месяца'),
+        ('2 месяца', '2 месяца'),
+        ('1 месяц', '1 месяц'),
     ]
     status = models.CharField(
         'статус задачи',
