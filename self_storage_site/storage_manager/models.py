@@ -23,7 +23,7 @@ class BoxPlace(models.Model):
     boxes_quantity = models.PositiveIntegerField(
         'Общее количество боксов',
         default=1)
-    note = models.CharField('Пимечание', max_length=100, blank=True)
+    note = models.CharField('Примечание', max_length=100, blank=True)
     image = models.ImageField(
         'Изображение', upload_to='boxplaces', null=True, blank=True)
     temperature = models.IntegerField('Температура в боксах', default=18)
