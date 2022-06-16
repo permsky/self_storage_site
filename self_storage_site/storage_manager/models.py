@@ -14,6 +14,7 @@ class BoxPlace(models.Model):
     note = models.CharField('Пимечание', max_length=100, blank=True)
     image = models.ImageField(
         'Изображение', upload_to='boxplaces', null=True, blank=True)
+    temperature = models.IntegerField('Температура в боксах', default=18)
 
     class Meta:
         verbose_name = 'Ангар для боксов'
