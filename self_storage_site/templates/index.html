@@ -22,9 +22,9 @@
 			<div class="modal-body d-flex justify-content-center align-items-center">
 				<form id="register-form" class="d-flex flex-column align-items-center" style="max-width: 420px">
 					<h1 class="modal-title text-center fw-bold mb-3">Регистрация</h1>
-					<input type="email" required name="EMAIL_CREATE" class="form-control border-8 mb-4 py-3 px-5 border-0 fs_24 SelfStorage__bg_lightgrey" placeholder="E-mail">
-					<input type="text" required name="PASSWORD_CREATE" class="form-control border-8 mb-4 py-3 px-5 border-0 fs_24 SelfStorage__bg_lightgrey" placeholder="Пароль">
-					<input type="text" required name="PASSWORD_CONFIRM" class="form-control border-8 mb-4 py-3 px-5 border-0 fs_24 SelfStorage__bg_lightgrey" placeholder="Подтверждение пароля">
+					<input type="email" required name="email" class="form-control border-8 mb-4 py-3 px-5 border-0 fs_24 SelfStorage__bg_lightgrey" placeholder="E-mail">
+					<input type="text" required name="password1" class="form-control border-8 mb-4 py-3 px-5 border-0 fs_24 SelfStorage__bg_lightgrey" placeholder="Пароль">
+					<input type="text" required name="password2" class="form-control border-8 mb-4 py-3 px-5 border-0 fs_24 SelfStorage__bg_lightgrey" placeholder="Подтверждение пароля">
 					<span class="fw-light SelfStorage_grey">Нажимая на кнопку, вы подтверждаете свое <a href="#" class="SelfStorage_grey">согласие на обработку персональных данных</a></span>
 					<button class="btn border-8 py-3 px-5 mt-5 mb-3 w-100 text-white fs_24 SelfStorage__bg_orange SelfStorage__btn2_orange"  type="submit">Зарегистрироваться</button>
 					<span>Уже зарегистрированы? <a href="#" class="SelfStorage_orange" data-bs-toggle="modal" data-bs-target="#SignModal" data-bs-dismiss="modal" aria-label="Close">Войти в личный кабинет</a></span>
@@ -40,10 +40,10 @@
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body d-flex justify-content-center align-items-center">
-				<form class="d-flex flex-column align-items-center" style="max-width: 420px">
+				<form id="login-form" class="d-flex flex-column align-items-center" style="max-width: 420px">
 					<h1 class="modal-title text-center fw-bold mb-3">Вход</h1>
-					<input type="email" required name="EMAIL" class="form-control  border-8 mb-4 py-3 px-5 border-0 fs_24 SelfStorage__bg_lightgrey" placeholder="E-mail">
-					<input type="text" required name="PASSWORD" class="form-control  border-8 mb-4 py-3 px-5 border-0 fs_24 SelfStorage__bg_lightgrey" placeholder="Пароль">
+					<input type="email" required name="email" class="form-control  border-8 mb-4 py-3 px-5 border-0 fs_24 SelfStorage__bg_lightgrey" placeholder="E-mail">
+					<input type="text" required name="password" class="form-control  border-8 mb-4 py-3 px-5 border-0 fs_24 SelfStorage__bg_lightgrey" placeholder="Пароль">
 					<a href="#" class="SelfStorage_orange" data-bs-toggle="modal" data-bs-target="#ForgetModal" data-bs-dismiss="modal" aria-label="Close">Забыли пароль?</a>
 					<button class="btn border-8 py-3 px-5 mt-5 mb-3 w-100 text-white fs_24 SelfStorage__bg_orange SelfStorage__btn2_orange">Войти</button>
 					<span>Нет аккаунта?  <a href="#" class="SelfStorage_orange" data-bs-toggle="modal" data-bs-target="#RegModal" data-bs-dismiss="modal" aria-label="Close">Зарегистрируйтесь на сайте</a></span>
@@ -68,11 +68,6 @@
 			</div>
 		</div>
 	</div>
-</aside>
-<aside id="FormResponseModal" class="modal hide fade in" aria-hidden="true">
-    <div class="modal-header">
-        <label id="responsestatus"></label>
-    </div>
 </aside>
 <main class="container mt-header">
 	<article class="row">
@@ -192,21 +187,21 @@
 		<div class="col-12 col-lg-6 mb-3 mb-lg-0 SelfStorage__img2"></div>
 		<div class="col-12 col-lg-6 d-flex flex-column align-items-center align-items-lg-start">
 			<h1 class="text-start fw-bold SelfStorage_green mb-4">Всегда рядом</h1>
-			<h4 class="SelfStorage_grey">Одинцово,  ул. Северная, д. 36</h4>
+			<h4 class="SelfStorage_grey">Ангар: {{box_space.name}}, адрес: {{box_space.address}}</h4>
 			<div class="row">
 				<div class="col-6 d-flex flex-column align-items-center align-items-lg-start">
-					<span class="fs_30 fw-bold SelfStorage_orange">18 °С</span>
+					<span class="fs_30 fw-bold SelfStorage_orange">{{box_space.temperature}} °С</span>
 					<span class="SelfStorage_grey mb-3">Температура на складе</span>
-					<span class="fs_30 fw-bold SelfStorage_orange">24 из 258</span>
+					<span class="fs_30 fw-bold SelfStorage_orange">{{free_space}} из {{box_space.boxes_quantity}}</span>
 					<span class="SelfStorage_grey mb-3">Боксов свободно</span>
 				</div>
 				<div class="col-6 d-flex flex-column align-items-center align-items-lg-start">
 					<span class="fs_30 fw-bold SelfStorage_orange">до 3.5 м</span>
 					<span class="SelfStorage_grey mb-3">Высота потолка</span>
-					<span class="fs_30 fw-bold SelfStorage_orange">2264 ₽</span>
+					<span class="fs_30 fw-bold SelfStorage_orange">от {{min_price}} ₽</span>
 					<span class="SelfStorage_grey mb-3">Оплата за месяц</span>
 				</div>
-				<a href="#" class="text-center text-lg-start mt-4 mb-5 SelfStorage_green">Подробнее о складе</a>
+				<a href="{% url 'boxes'%}" class="text-center text-lg-start mt-4 mb-5 SelfStorage_green">Подробнее о складе</a>
 				<div class="d-flex flex-column align-items-center align-items-lg-start">
 					<button class="btn w-75 fs_24 px-5 py-3 text-white border-8 SelfStorage__bg_green SelfStorage__btn2_green mb-3">Арендовать бокс</button>
 					<button class="btn w-75 fs_24 px-5 py-3 text-white border-8 SelfStorage__bg_orange SelfStorage__btn2_orange">Выбрать склад</button>
@@ -296,14 +291,37 @@
             event.preventDefault();
 			let csrftoken = '{{ csrf_token }}'
             $.ajax({
-                url: 'register/',
+                url: '{% url "register" %}',
                 type: 'POST',
 				headers: { 'X-CSRFToken': csrftoken },
                 data: $('#register-form').serialize(),
-                success: function(data){
-                     $('#responsestatus').val(data);
-                     $('#RegModal').modal('hide');
-                }
+                success: function(response){
+					if (response.success)
+						{alert("Вы успешно зарегистрировались!");
+                     	window.location.reload();}
+					else if (response.email)
+						alert(response.email)
+					else if (response.password1)
+						alert(response.password1)
+				}
+            });
+        });
+    });
+	$(document).ready(function(){
+        $("#login-form").submit(function (event) {
+            event.preventDefault();
+			let csrftoken = '{{ csrf_token }}'
+            $.ajax({
+                url: '{% url "login" %}',
+                type: 'POST',
+				headers: { 'X-CSRFToken': csrftoken },
+                data: $('#login-form').serialize(),
+                success: function(response){
+					if (response.success === true)
+                     	window.location.reload()
+					else if (response.success === false)
+						alert(response.message)
+				}
             });
         });
     });

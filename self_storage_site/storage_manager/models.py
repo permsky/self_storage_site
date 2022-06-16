@@ -1,9 +1,20 @@
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.core.validators import MinValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator
+from django.db.models import Sum, Min
 
 
 User = get_user_model()
+
+
+class BoxPlaceQuerySet(models.QuerySet):
+    def get_free_boxes(self):
+        free_boxes = self.annotate(free_boxes=Sum('place_boxes__in_use'))
+        return free_boxes
+
+    def get_min_price(self):
+        min_price = self.annotate(min_price=Min('place_boxes__tariff'))
+        return min_price
 
 
 class BoxPlace(models.Model):
@@ -16,6 +27,7 @@ class BoxPlace(models.Model):
     image = models.ImageField(
         'Изображение', upload_to='boxplaces', null=True, blank=True)
     temperature = models.IntegerField('Температура в боксах', default=18)
+    objects = BoxPlaceQuerySet.as_manager()
 
     class Meta:
         verbose_name = 'Ангар для боксов'
@@ -44,7 +56,13 @@ class Box(models.Model):
         on_delete=models.PROTECT,
         related_name='boxes',
         verbose_name='Объём бокса')
-    in_use = models.BooleanField('Бокс использован')
+    in_use = models.PositiveSmallIntegerField(
+        'Бокс использован',
+        default=0,
+        validators=[
+            MaxValueValidator(1),
+            MinValueValidator(0)
+        ])
     boxes_place = models.ForeignKey(
         BoxPlace,
         on_delete=models.PROTECT,

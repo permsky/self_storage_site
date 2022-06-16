@@ -1,4 +1,5 @@
 import os
+import random
 from datetime import datetime
 from pathlib import Path
 
@@ -18,3 +19,7 @@ def create_qrcode(code):
     image_path = str(Path(qrcodes_path, filename).with_suffix(suffix))
     qrcode_image.save(image_path)
     return image_path
+
+
+def randomise_from_range(stop):
+    return random.randrange(stop)

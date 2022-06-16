@@ -20,6 +20,5 @@ from django.urls import path, include
 
 urlpatterns = [
     path('', include('storage_manager.urls')),
-    path('register/', include('storage_manager.urls')),
     path('admin/', admin.site.urls),
 ]
