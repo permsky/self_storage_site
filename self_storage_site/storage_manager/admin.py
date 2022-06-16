@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import BoxPlace, Box, BoxVolume, RentalTime, Order
+
+from .models import BoxPlace, Box, BoxVolume, RentalTime, Order, Job
 
 
 @admin.register(BoxPlace)
@@ -24,4 +25,8 @@ class RentalTimeAdmin(admin.ModelAdmin):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
+    ...
+
+@admin.register(Job)
+class JobAdmin(admin.ModelAdmin):
     ...
