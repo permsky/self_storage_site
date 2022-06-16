@@ -47,7 +47,7 @@ def send_email_to_customer(
         subject='Оповещение от сервиса SelfStorage',
         body=message,
         from_email=self_storage_site.settings.EMAIL_HOST_USER,
-        to=list(email_address)
+        to=[email_address]
     )
     if image_path:
         image_name = Path(image_path).name
@@ -91,16 +91,26 @@ def process_job_status():
 def create_jobs():
     active_orders = Order.objects.filter(status='active')
     for order in active_orders:
-        if order.end_date < datetime.now():
-            interval = '6 месяцев'
-            Job.objects.create(
-                status='new',
-                customer_email=order.customer_email,
-                interval=interval,
-                with_qrcode=False,
-                date_to_run=datetime.now().date(),
-                order=order
-            )
+        expiration_date = order.end_date
+        date_now = datetime.now().date()
+        if expiration_date < date_now:
+            intervals = [
+                '6 месяцев',
+                '5 месяцев',
+                '4 месяца',
+                '3 месяца',
+                '2 месяца',
+                '1 месяц',
+            ]
+            for interval in intervals:
+                Job.objects.create(
+                    status='new',
+                    interval=interval,
+                    with_qrcode=False,
+                    date_to_run=date_now,
+                    order=order
+                )
+                date_now += timedelta(days=30)
             order.status = 'expired'
             order.save()
     logger.warning('Jobs created')

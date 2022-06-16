@@ -23,7 +23,7 @@ class BoxPlace(models.Model):
     boxes_quantity = models.PositiveIntegerField(
         'Общее количество боксов',
         default=1)
-    note = models.CharField('Пимечание', max_length=100, blank=True)
+    note = models.CharField('Примечание', max_length=100, blank=True)
     image = models.ImageField(
         'Изображение', upload_to='boxplaces', null=True, blank=True)
     temperature = models.IntegerField('Температура в боксах', default=18)
@@ -91,9 +91,9 @@ class RentalTime(models.Model):
 
 class Order(models.Model):
     STATUSES = [
-        (1, 'active'),
-        (2, 'expired'),
-        (3, 'closed')
+        ('active', 'active'),
+        ('expired', 'expired'),
+        ('closed', 'closed')
     ]
     customer = models.ForeignKey(
         User,
@@ -109,8 +109,8 @@ class Order(models.Model):
         RentalTime,
         on_delete=models.PROTECT,
         verbose_name='Время аренды')
-    start_date = models.DateTimeField('заказ от', auto_now_add=True)
-    end_date = models.DateTimeField('заказ до')
+    start_date = models.DateField('заказ от')
+    end_date = models.DateField('заказ до')
     access_code = models.PositiveIntegerField('код доступа к ячейке', default=213456789)
     status = models.CharField(
         'статус заказа',
@@ -128,21 +128,21 @@ class Order(models.Model):
 
 class Job(models.Model):
     STATUSES = [
-        (1, 'new'),
-        (2, 'ready'),
-        (3, 'done')
+        ('new', 'new'),
+        ('ready', 'ready'),
+        ('done', 'done')
     ]
     INTERVALS=[
-        (1, 'месяц'),
-        (2, '2 недели'),
-        (3, '1 неделю'),
-        (4, '3 дня'),
-        (5, '6 месяцев'),
-        (6, '5 месяцев'),
-        (7, '4 месяца'),
-        (8, '3 месяца'),
-        (9, '2 месяца'),
-        (10, '1 месяц'),
+        ('месяц', 'месяц'),
+        ('2 недели', '2 недели'),
+        ('1 неделю', '1 неделю'),
+        ('3 дня', '3 дня'),
+        ('6 месяцев', '6 месяцев'),
+        ('5 месяцев', '5 месяцев'),
+        ('4 месяца', '4 месяца'),
+        ('3 месяца', '3 месяца'),
+        ('2 месяца', '2 месяца'),
+        ('1 месяц', '1 месяц'),
     ]
     status = models.CharField(
         'статус задачи',

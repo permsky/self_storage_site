@@ -14,18 +14,20 @@ def start_jobs():
     current_jobs = Job.objects.filter(status='ready')
     for job in current_jobs:
         stored_until = job.order.end_date.strftime('%d.%m.%Y')
+        email_address = job.order.customer.email
+        interval = job.interval
         if job.with_qrcode:
             send_email_to_customer.send(
-                email_address=job.order.customer.email,
+                email_address=email_address,
                 stored_until=stored_until,
-                interval=job.interval,
+                interval=interval,
                 image_path=create_qrcode(job.order.access_code)
             )
         else:
             send_email_to_customer.send(
-                email_address=job.customer_email,
+                email_address=email_address,
                 stored_until=stored_until,
-                interval=job.interval
+                interval=interval
             )
         job.status = 'done'
         job.save()

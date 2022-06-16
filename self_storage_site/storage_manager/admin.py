@@ -27,6 +27,13 @@ class RentalTimeAdmin(admin.ModelAdmin):
 class OrderAdmin(admin.ModelAdmin):
     ...
 
+
 @admin.register(Job)
 class JobAdmin(admin.ModelAdmin):
-    ...
+    list_display = [
+        'status',
+        'date_to_run',
+        'interval',
+        'with_qrcode',
+        'order'
+    ]
