@@ -7,6 +7,7 @@ from . import views
 urlpatterns = [
     path('', views.index, name='index'),
     path('faq/', render, kwargs={'template_name': 'faq.html'}, name='faq'),
+    path('boxes/', render, kwargs={'template_name': 'boxes.html'}, name='boxes'),
     path('register/', views.register, name='register'),
     path('login/', views.sign_in, name='login'),
 ]
