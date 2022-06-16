@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.core.validators import MinValueValidator
 
+
 User = get_user_model()
 
 
@@ -71,6 +72,11 @@ class RentalTime(models.Model):
 
 
 class Order(models.Model):
+    STATUSES = [
+        (1, 'active'),
+        (2, 'expired'),
+        (3, 'closed')
+    ]
     customer = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -80,14 +86,19 @@ class Order(models.Model):
         Box,
         on_delete=models.PROTECT,
         related_name='box_orders',
-        verbose_name='Использованный бокс')
+        verbose_name='Используемый бокс')
     rental_time = models.ForeignKey(
         RentalTime,
         on_delete=models.PROTECT,
         verbose_name='Время аренды')
     start_date = models.DateTimeField('заказ от', auto_now_add=True)
     end_date = models.DateTimeField('заказ до')
-    key = models.PositiveIntegerField('Ключ доступа')
+    access_code = models.PositiveIntegerField('код доступа к ячейке', default=213456789)
+    status = models.CharField(
+        'статус заказа',
+        choices=STATUSES,
+        max_length=10
+    )
 
     class Meta:
         verbose_name = 'Заказ'
@@ -95,3 +106,43 @@ class Order(models.Model):
 
     def __str__(self):
         return f'Заказ {self.pk} клиента {self.customer.first_name} от {str(self.start_date)}'
+
+
+class Job(models.Model):
+    STATUSES = [
+        (1, 'new'),
+        (2, 'ready'),
+        (3, 'done')
+    ]
+    INTERVALS=[
+        (1, 'месяц'),
+        (2, '2 недели'),
+        (3, '1 неделю'),
+        (4, '3 дня'),
+        (5, '6 месяцев'),
+        (6, '5 месяцев'),
+        (7, '4 месяца'),
+        (8, '3 месяца'),
+        (9, '2 месяца'),
+        (10, '1 месяц'),
+    ]
+    status = models.CharField(
+        'статус задачи',
+        choices=STATUSES,
+        max_length=10
+    )
+    date_to_run = models.DateField('дата запуска')
+    interval = models.CharField(
+        'осталось времени',
+        choices=INTERVALS,
+        max_length=100
+    )
+    with_qrcode = models.BooleanField('отправлять qr-код', default=True)
+    order = models.ForeignKey(
+        Order,
+        on_delete=models.CASCADE,
+        related_name='jobs'
+    )
+    
+    def __str__(self):
+        return f'Задача на отправку почты по заказу с id: {self.order.id}'
