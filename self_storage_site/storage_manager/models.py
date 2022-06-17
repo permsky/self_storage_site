@@ -166,6 +166,10 @@ class Job(models.Model):
         related_name='jobs'
     )
     
+    class Meta:
+        verbose_name = 'Оповещение'
+        verbose_name_plural = 'Оповещения'
+    
     def __str__(self):
         return f'Задача на отправку почты по заказу с id: {self.order.id}'
 
