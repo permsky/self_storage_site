@@ -2,6 +2,9 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import Sum, Min
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from phonenumber_field.modelfields import PhoneNumberField
 
 
 User = get_user_model()
@@ -164,3 +167,23 @@ class Job(models.Model):
     
     def __str__(self):
         return f'Задача на отправку почты по заказу с id: {self.order.id}'
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    first_name = models.CharField('Имя', max_length=30, blank=True)
+    last_name = models.CharField('Фамилия', max_length=30, blank=True)
+    phone_number = PhoneNumberField('Номер телефона', blank=True)
+    avatar = models.ImageField('Аватар', blank=True)
+
+    @receiver(post_save, sender=User)
+    def create_user_profile(sender, instance, created, **kwargs):
+        if created:
+            Profile.objects.create(user=instance)
+
+    @receiver(post_save, sender=User)
+    def save_user_profile(sender, instance, **kwargs):
+        instance.profile.save()
+
+    def __str__(self):
+        return f'{self.user} {self.first_name} {self.last_name}'

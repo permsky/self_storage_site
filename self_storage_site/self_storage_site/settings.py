@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'django_dramatiq',
 
     'storage_manager.apps.StarageManagerConfig',
+    'phonenumber_field',
 ]
 
 MIDDLEWARE = [
