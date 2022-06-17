@@ -30,6 +30,7 @@ class BoxPlace(models.Model):
     image = models.ImageField(
         'Изображение', upload_to='boxplaces', null=True, blank=True)
     temperature = models.IntegerField('Температура в боксах', default=18)
+    roof_height = models.FloatField('Высота ангара', default=3.5)
     objects = BoxPlaceQuerySet.as_manager()
 
     class Meta:
