@@ -1,7 +1,14 @@
 from django.contrib import admin
 
-from .models import (BoxPlace, Box, BoxVolume, RentalTime, Order, Job,
-                     CalculateCustomer)
+from .models import (
+    BoxPlace,
+    Box,
+    BoxVolume,
+    RentalTime,
+    Order,
+    Job,
+    CalculateCustomer
+)
 
 
 @admin.register(BoxPlace)
@@ -26,11 +33,20 @@ class RentalTimeAdmin(admin.ModelAdmin):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    ...
+    list_filter = ['status']
+    list_display = [
+        'customer',
+        'box',
+        'rental_time',
+        'start_date',
+        'end_date',
+        'status',
+    ]
 
 
 @admin.register(Job)
 class JobAdmin(admin.ModelAdmin):
+    list_filter = ['status']
     list_display = [
         'status',
         'date_to_run',
@@ -38,6 +54,7 @@ class JobAdmin(admin.ModelAdmin):
         'with_qrcode',
         'order'
     ]
+
 
 @admin.register(CalculateCustomer)
 class OrderCalculateCustomer(admin.ModelAdmin):
