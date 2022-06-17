@@ -18,7 +18,13 @@ class BoxPlaceAdmin(admin.ModelAdmin):
 
 @admin.register(Box)
 class BoxAdmin(admin.ModelAdmin):
-    ...
+    list_filter = ['in_use']
+    list_display = [
+        'box_volume',
+        'boxes_place',
+        'tariff',
+        'in_use',
+    ]
 
 
 @admin.register(BoxVolume)
