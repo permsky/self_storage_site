@@ -2,8 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from .forms import UserRegisterForm
 from django.http import JsonResponse
-from storage_manager.models import Box, BoxPlace
+from storage_manager.models import Box, BoxPlace, Order
 from django.db.models import Min
+from django.contrib.auth.decorators import login_required
+from datetime import datetime, date, timezone
 
 from .utils import randomise_from_range
 
@@ -68,3 +70,15 @@ def index(request):
         'min_price': random_box_space.min_price,
     }
     return render(request, 'index.html', context)
+
+
+@login_required
+def personal_account(request):
+    user_orders = Order.objects.filter(customer=request.user).select_related('box__boxes_place')
+    for order in user_orders:
+        order.expires_soon = (order.end_date - date.today()).days < 14
+
+    context = {
+        'orders': user_orders
+    }
+    return render(request, 'personal_account.html', context)

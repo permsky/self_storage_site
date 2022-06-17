@@ -102,7 +102,7 @@ class Order(models.Model):
     customer = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='users_orders',
+        related_name='orders',
         verbose_name='Имя клиента')
     box = models.OneToOneField(
         Box,
