@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from .forms import UserRegisterForm
 from django.http import JsonResponse
-from storage_manager.models import Box, BoxPlace
+from storage_manager.models import Box, BoxPlace, CalculateCustomer
 from django.db.models import Min
 
 from .utils import randomise_from_range
@@ -52,7 +52,13 @@ def sign_in(request):
 
 
 def index(request):
-    #print(request.__dict__)
+    print(request.GET)
+    if request.GET.get('EMAIL1'):
+        customer_mail = request.GET.get('EMAIL1')
+        CalculateCustomer.objects.get_or_create(
+            customer_mail=customer_mail)
+        return redirect('index')
+
     all_box_spaces = list(BoxPlace.objects.all().prefetch_related(
         'place_boxes').get_free_boxes().get_min_price())
     space_count = len(all_box_spaces)

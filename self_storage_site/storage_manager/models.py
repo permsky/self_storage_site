@@ -188,3 +188,14 @@ class Profile(models.Model):
 
     def __str__(self):
         return f'{self.user} {self.first_name} {self.last_name}'
+
+
+class CalculateCustomer(models.Model):
+    customer_mail = models.EmailField('Почта заказчика расчета', max_length=254)
+
+    class Meta:
+        verbose_name = 'Почта заказчика расчета'
+        verbose_name_plural = 'Почта заказчика расчета'
+
+    def __str__(self):
+        return self.customer_mail

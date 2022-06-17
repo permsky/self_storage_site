@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from .models import BoxPlace, Box, BoxVolume, RentalTime, Order, Job
+from .models import (BoxPlace, Box, BoxVolume, RentalTime, Order, Job,
+                     CalculateCustomer)
 
 
 @admin.register(BoxPlace)
@@ -37,3 +38,7 @@ class JobAdmin(admin.ModelAdmin):
         'with_qrcode',
         'order'
     ]
+
+@admin.register(CalculateCustomer)
+class OrderCalculateCustomer(admin.ModelAdmin):
+    ...
