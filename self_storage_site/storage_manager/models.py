@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -60,13 +62,10 @@ class Box(models.Model):
         on_delete=models.PROTECT,
         related_name='boxes',
         verbose_name='Объём бокса')
-    in_use = models.PositiveSmallIntegerField(
+    in_use = models.BooleanField(
         'Бокс использован',
-        default=0,
-        validators=[
-            MaxValueValidator(1),
-            MinValueValidator(0)
-        ])
+        default=False,
+    )
     boxes_place = models.ForeignKey(
         BoxPlace,
         on_delete=models.PROTECT,
@@ -128,6 +127,32 @@ class Order(models.Model):
 
     def __str__(self):
         return f'Заказ {self.pk} клиента {self.customer.first_name} от {str(self.start_date)}'
+    
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        intervals = [
+            'месяц',
+            '2 недели',
+            'неделю',
+            '3 дня',
+        ]
+        deltas = {
+            'месяц': timedelta(days=30),
+            '2 недели': timedelta(days=14),
+            'неделю': timedelta(days=7),
+            '3 дня': timedelta(days=3),
+        }
+        for interval in intervals:
+            date_to_run = self.end_date - deltas[interval]
+            Job.objects.create(
+                status='new',
+                interval=interval,
+                with_qrcode=True,
+                date_to_run=date_to_run,
+                order=self
+            )
+        self.box.in_use = True
+        self.box.save()
 
 
 class Job(models.Model):
