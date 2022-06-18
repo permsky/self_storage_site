@@ -2,7 +2,7 @@ import os
 import random
 from datetime import datetime
 from pathlib import Path
-
+from storage_manager.models import CalculateCustomer
 import qrcode
 
 import self_storage_site.settings
@@ -23,3 +23,11 @@ def create_qrcode(code):
 
 def randomise_from_range(stop):
     return random.randrange(stop)
+
+
+def get_email(request):
+    customer_mail = request.GET.get('EMAIL1')
+    CalculateCustomer.objects.get_or_create(
+        customer_mail=customer_mail)
+    print(customer_mail)
+
