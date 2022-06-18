@@ -62,7 +62,7 @@
 		<div class="col-lg-3 d-flex flex-column nav nav-pills">
 			<button class="ps-0 btn bg-white fs_24 shadow-none SelfStorage_orange SelfStorage_tab active" id="LK-tab" data-bs-toggle="pill" data-bs-target="#LK" type="button" role="tab" aria-controls="LK" aria-selected="true">Личный кабинет</button>
 			<button class="ps-0 btn bg-white fs_24 shadow-none SelfStorage_grey SelfStorage_tab" id="Rent-tab" data-bs-toggle="pill" data-bs-target="#Rent" type="button" role="tab" aria-controls="Rent" aria-selected="false">Моя аренда</button>
-			<a href="./faq.html" class="btn fs_24 shadow-none text-decoration-none SelfStorage_grey SelfStorage_tab">FAQ</a>
+			<a href="{% url 'faq' %}" class="btn fs_24 shadow-none text-decoration-none SelfStorage_grey SelfStorage_tab">FAQ</a>
 			<a href="{% url 'logout' %}" class="btn fs_24 shadow-none text-decoration-none SelfStorage_grey SelfStorage_tab">Выйти</a>
 		</div>
 		<div class="col-lg-9">
@@ -70,6 +70,9 @@
 				<div class="tab-pane fade show active" id="LK" role="tabpanel" aria-labelledby="LK-tab">
 					<div class="row">
 						<div class="col-12 col-sm-5 d-flex flex-column align-items-center justify-items-center">
+							<br>
+							<br>
+							<br>
 							<img src="{% static 'img/image10.png' %}" class="rounded-pill mb-3" alt="">
 							{% if user.profile.first_name %}
 							<h4>{{ user.profile.first_name }} {{ user.profile.last_name }}</h4>
@@ -78,17 +81,18 @@
 							{% endif %}
 						</div>
 						<div class="col-12 col-sm-7 d-flex flex-column">
-							<form>
+							<form id="change-form">
+								{% csrf_token %}
 								<label class="fs_24 SelfStorage_green ms-2" for="EMAIL">E-mail</label>
-								<input type="email" name="EMAIL_EDIT" id="EMAIL" class="form-control fs_24 ps-2 SelfStorage__input" value="{{ user.username }}" disabled>
+								<input type="email" name="email" id="EMAIL" class="form-control fs_24 ps-2 SelfStorage__input" value="{{ user.username }}" disabled>
 								<label class="fs_24 SelfStorage_green ms-2" for="PHONE">Телефон</label>
-								<input type="tel" name="PHONE_EDIT" id="PHONE" class="form-control fs_24 ps-2 SelfStorage__input" {% if user.profile.phone_number %} value="{{ user.profile.phone_number }}"{% else %} placeholder="+7 999 999 9999" {% endif %} disabled>
+								<input type="tel" name="phone_number" id="PHONE" class="form-control fs_24 ps-2 SelfStorage__input" {% if user.profile.phone_number %} value="{{ user.profile.phone_number }}"{% else %} placeholder="+7 999 999 9999" {% endif %} disabled>
 								<label class="fs_24 SelfStorage_green ms-2" for="FIRST_NAME">Ваше имя</label>
-								<input type="text" name="FIRST_NAME" id="FIRST_NAME" class="form-control fs_24 ps-2 SelfStorage__input" {% if user.profile.first_name %} value="{{ user.profile.first_name }}"{% else %} placeholder="------" {% endif %} disabled>
+								<input type="text" name="first_name" id="FIRST_NAME" class="form-control fs_24 ps-2 SelfStorage__input" {% if user.profile.first_name %} value="{{ user.profile.first_name }}"{% else %} placeholder="Имя" {% endif %} disabled>
 								<label class="fs_24 SelfStorage_green ms-2" for="LAST_NAME">Ваша фамилия</label>
-								<input type="text" name="LAST_NAME" id="LAST_NAME" class="form-control fs_24 ps-2 SelfStorage__input" {% if user.profile.last_name %} value="{{ user.profile.last_name }}"{% else %} placeholder="------" {% endif %} disabled>
+								<input type="text" name="last_name" id="LAST_NAME" class="form-control fs_24 ps-2 SelfStorage__input" {% if user.profile.last_name %} value="{{ user.profile.last_name }}"{% else %} placeholder="Фамилия" {% endif %} disabled>
 								<label class="fs_24 SelfStorage_green ms-2" for="PASSWORD">Пароль</label>
-								<input type="password" name="PASSWORD_EDIT" id="PASSWORD" class="form-control fs_24 border: 1px ps-2 SelfStorage__input" placeholder="*********" disabled>
+								<input type="password" name="password" id="PASSWORD" class="form-control fs_24 border: 1px ps-2 SelfStorage__input" placeholder="*********" disabled>
 								<button type="submit" class="btn SelfStorage_green ps-1" id="save" style="display: none">Сохранить</button>
 								<a class="btn SelfStorage_orange ps-1" id="edit">Редактировать</a>
 								<script>
@@ -102,18 +106,6 @@
 										document.getElementById('PASSWORD').type = 'text'
 										document.getElementById('edit').style.display = 'none'
 										document.getElementById('save').style.display = 'inline-block'
-									})
-									document.getElementById('save').addEventListener('click', () => {
-										setTimeout(() => {
-											document.getElementById('EMAIL').disabled = true
-											document.getElementById('PHONE').disabled = true
-											document.getElementById('FIRST_NAME').disabled = true
-											document.getElementById('LAST_NAME').disabled = true
-											document.getElementById('PASSWORD').disabled = true
-											document.getElementById('PASSWORD').type = 'password'
-											document.getElementById('edit').style.display = 'inline-block'
-											document.getElementById('save').style.display = 'none'
-										}, 0)
 									})
 								</script>
 							</form>
@@ -193,6 +185,27 @@
 		<h6 class="SelfStorage_grey text-center mt-5">© 2022 SelfStorage. Использование материалов запрещено без письменного согласия</h6>
 	</div>
 </footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script>
+	$(document).ready(function(){
+        $("#change-form").submit(function (event) {
+            event.preventDefault();
+			let csrftoken = '{{ csrf_token }}'
+            $.ajax({
+                url: '{% url "profile_change" %}',
+                type: 'POST',
+				headers: { 'X-CSRFToken': csrftoken },
+                data: $('#change-form').serialize(),
+                success: function(response){
+					if (response.success === true)
+                     	window.location.reload()
+					else if (response.success === false)
+						alert(response.message)
+				}
+            });
+        });
+    });
+</script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 </html>

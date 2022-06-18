@@ -22,7 +22,7 @@ class UserRegisterForm(forms.ModelForm):
         email = self.cleaned_data.get('email')
         if User.objects.filter(email=email).exists():
             errors['email'] = ValidationError(
-                'E-mail адрес уже используется.'
+                'E-mail адрес уже используется'
             )
         password1 = self.cleaned_data.get('password1')
         password2 = self.cleaned_data.get('password2')
