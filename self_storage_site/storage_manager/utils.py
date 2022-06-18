@@ -1,14 +1,18 @@
 import json
-from multiprocessing.managers import BaseProxy
 import os
 import random
+import qrcode
 from datetime import datetime
 from pathlib import Path
-from storage_manager.models import CalculateCustomer
-import qrcode
 
 import self_storage_site.settings
-from storage_manager.models import BoxPlace, BoxVolume, Box, RentalTime
+from storage_manager.models import (
+    BoxPlace,
+    BoxVolume,
+    Box,
+    RentalTime,
+    CalculateCustomer
+)
 
 
 def read_from_json(filepath):
