@@ -71,4 +71,3 @@ def get_email(request):
     CalculateCustomer.objects.get_or_create(
         customer_mail=customer_mail)
     print(customer_mail)
-
