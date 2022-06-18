@@ -7,7 +7,7 @@ from django.db.models import Min
 from django.contrib.auth.decorators import login_required
 from datetime import datetime, date, timezone
 
-from .utils import randomise_from_range
+from .utils import randomise_from_range, get_email
 
 
 def register(request):
@@ -54,11 +54,8 @@ def sign_in(request):
 
 
 def index(request):
-    print(request.GET)
     if request.GET.get('EMAIL1'):
-        customer_mail = request.GET.get('EMAIL1')
-        CalculateCustomer.objects.get_or_create(
-            customer_mail=customer_mail)
+        get_email(request)
         return redirect('index')
 
     all_box_spaces = list(BoxPlace.objects.all().prefetch_related(
@@ -88,3 +85,15 @@ def personal_account(request):
         'orders': user_orders
     }
     return render(request, 'personal_account.html', context)
+
+
+def boxes(request):
+    if request.GET.get('EMAIL1'):
+        get_email(request)
+        return redirect('boxes')
+
+    all_places = BoxPlace.objects.all()
+    context = {
+        'all_places': all_places
+    }
+    return render(request, 'boxes.html', context)
