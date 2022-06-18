@@ -92,7 +92,9 @@ def boxes(request):
         get_email(request)
         return redirect('boxes')
 
-    all_places = BoxPlace.objects.all()
+    all_places = BoxPlace.objects.all().prefetch_related(
+        'place_boxes').get_free_boxes().get_min_price()
+
     context = {
         'all_places': all_places
     }
