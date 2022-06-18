@@ -1,3 +1,5 @@
+import json
+from multiprocessing.managers import BaseProxy
 import os
 import random
 from datetime import datetime
@@ -6,6 +8,41 @@ from pathlib import Path
 import qrcode
 
 import self_storage_site.settings
+from storage_manager.models import BoxPlace, BoxVolume, Box, RentalTime
+
+
+def read_from_json(filepath):
+            with open(filepath, encoding='UTF-8', mode='r') as f:
+                return json.loads(f.read())
+
+
+def fill_database(filepath):
+    storages = read_from_json(filepath)
+    for item in storages:
+        if item['type'] == 'box_volumes':
+            for volume in item['box_volumes']:
+                BoxVolume.objects.get_or_create(volume=volume)
+        if item['type'] == 'rental_time':
+            for time in item['rental_time']:
+                RentalTime.objects.get_or_create(time_intervals=time)
+        if item['type'] == 'box_places':
+            for storage in item['box_places']:
+                box_place = BoxPlace.objects.get_or_create(
+                    name=storage['name'],
+                    address=storage['address'],
+                    boxes_quantity=storage['boxes_quantity'],
+                    note=storage['note'],
+                )
+                box_sizes = storage['box_sizes']
+                for box_size in box_sizes:
+                    count_and_price = box_sizes[box_size]
+                    for box in range(count_and_price[0]):
+                        box_volume = BoxVolume.objects.get(volume=int(box_size))
+                        Box.objects.create(
+                            box_volume=box_volume,
+                            boxes_place=box_place[0],
+                            tariff=count_and_price[1]
+                        )
 
 
 def create_qrcode(code):
