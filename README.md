@@ -7,11 +7,11 @@
 Для запуска в системе должен быть установлен Python 3.
 
 - Скачайте код
-- Создайте и активируйте виртуальное окружение командой 
+- Создайте и активируйте виртуальное окружение командой:
 ```bash
-python3 -m venv env && source env/bin/activate
+python -m venv env && source env/bin/activate
 ```
-- Установите зависимости командой
+- Установите зависимости командой:
 ```bash
 pip install -r requirements.txt
 ```
@@ -26,28 +26,32 @@ pip install -r requirements.txt
   EMAIL_HOST_USER=*email, с которого будет отправляться письмо пользователю после регистрации*
   EMAIL_HOST_PASSWORD=*пароль приложения, генерируется в настройках почтового аккаунта* 
   </pre>
-- Создайте базу данных и примените миграции командами
+- Создайте базу данных и примените миграции командами:
 ```bash
-python3 manage.py makemigrations
-python3 manage.py migrate
+python manage.py makemigrations
+python manage.py migrate
 ```
-- Создайте учётную запись администратора командой
+- Создайте учётную запись администратора командой:
 ```bash
-python3 manage.py createsuperuser
+python manage.py createsuperuser
 ```
-- Запустите сервер командой
+- Запустите сервер командой:
 ```bash
-python3 manage.py runserver
+python manage.py runserver
+```
+- Загрузите начальные данные о складах в базу данных командой:
+```bash
+python manage.py load_from_json
 ```
 
 После этого главная страница будет доступна по адресу [127.0.0.1:8000](http://127.0.0.1:8000), админка — [127.0.0.1:8000/admin](http://127.0.0.1:8000/admin)
 - Запустите dramatiq-воркеры командой:
 ```bash
-python3 manage.py rundramatiq
+python manage.py rundramatiq
 ```
 - Запустите планировщик APScheduler командой:
 ```bash
-python3 manage.py run_scheduler
+python manage.py run_scheduler
 ```
 После данных действий активируется процесс отправки email-оповещений клиентам сервиса SelfStorage. 
 
