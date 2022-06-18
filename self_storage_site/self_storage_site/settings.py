@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
-from email.policy import default
 import os
 from pathlib import Path
 
@@ -48,11 +47,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'sorl.thumbnail',
+
     'django_dramatiq',
+    'phonenumber_field',
+    'sorl.thumbnail',
 
     'storage_manager.apps.StarageManagerConfig',
-    'phonenumber_field',
 ]
 
 MIDDLEWARE = [

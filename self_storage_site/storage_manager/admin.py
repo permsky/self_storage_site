@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.safestring import mark_safe
 
 from .models import (
     BoxPlace,
@@ -7,7 +8,8 @@ from .models import (
     RentalTime,
     Order,
     Job,
-    CalculateCustomer
+    CalculateCustomer,
+    Profile
 )
 
 
@@ -65,3 +67,62 @@ class JobAdmin(admin.ModelAdmin):
 @admin.register(CalculateCustomer)
 class OrderCalculateCustomer(admin.ModelAdmin):
     ...
+
+
+class ProfileFilter(admin.SimpleListFilter):
+    title = 'Статус клиента'
+    parameter_name = 'get_status_profile'
+
+    def lookups(self, request, model_admin):
+        return [
+            ['current', 'Боксы в аренде'],
+            ['not_current', 'Нет боксов в аренде'],
+            ['expired', 'Аренда просрочена'],
+        ]
+
+    def queryset(self, request, queryset):
+        if self.value() == 'current':
+            return queryset.filter(
+                user__orders__status='active'
+            )
+        elif self.value() == 'not_current':
+            return queryset.exclude(
+                user__orders__gte=0
+            )
+        elif self.value() == 'expired':
+            return queryset.filter(
+                user__orders__status='expired'
+            )
+
+
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = [
+        'user',
+        'first_name',
+        'last_name',
+        'phone_number',
+        'avatar',
+        'get_status_profile',
+    ]
+    list_filter = (ProfileFilter,)
+
+    def get_status_profile(self, obj):
+        states_colors = {
+            'боксы в аренде': 'green',
+            'нет боксов в аренде': 'gray',
+            'аренда просрочена': 'red'
+        }
+        is_expired = False
+        for order in obj.user.orders.all():
+            if order.status == 'expired':
+                is_expired = True
+                break
+        if not obj.user.orders.all():
+            state = 'нет боксов в аренде'
+        elif is_expired:
+            state = 'аренда просрочена'
+        else:
+            state = 'боксы в аренде'
+        return mark_safe(f'<span style="color:{states_colors[state]};font-weight:bold">{state}</span>')
+    get_status_profile.short_description = 'Статус клиента'
