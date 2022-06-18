@@ -11,7 +11,7 @@ from datetime import date
 from django.db.models import Q
 import phonenumbers
 
-from .utils import randomise_from_range
+from .utils import randomise_from_range, get_email
 
 
 def register(request):
@@ -58,11 +58,8 @@ def sign_in(request):
 
 
 def index(request):
-    print(request.GET)
     if request.GET.get('EMAIL1'):
-        customer_mail = request.GET.get('EMAIL1')
-        CalculateCustomer.objects.get_or_create(
-            customer_mail=customer_mail)
+        get_email(request)
         return redirect('index')
 
     all_box_spaces = list(BoxPlace.objects.all().prefetch_related(
@@ -146,3 +143,15 @@ def change_user_profile(request):
         context['success'] = True
         return JsonResponse(context)
     return JsonResponse({})
+
+
+def boxes(request):
+    if request.GET.get('EMAIL1'):
+        get_email(request)
+        return redirect('boxes')
+
+    all_places = BoxPlace.objects.all()
+    context = {
+        'all_places': all_places
+    }
+    return render(request, 'boxes.html', context)

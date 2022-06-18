@@ -63,7 +63,7 @@ class Box(models.Model):
         related_name='boxes',
         verbose_name='Объём бокса')
     in_use = models.BooleanField(
-        'Бокс использован',
+        'Бокс в аренде',
         default=False,
     )
     boxes_place = models.ForeignKey(
@@ -196,7 +196,7 @@ class Job(models.Model):
         verbose_name_plural = 'Оповещения'
     
     def __str__(self):
-        return f'Задача на отправку почты по заказу с id: {self.order.id}'
+        return f'Задача на отправку оповещения по заказу с id: {self.order.id}'
 
 
 class Profile(models.Model):
@@ -206,6 +206,10 @@ class Profile(models.Model):
     phone_number = PhoneNumberField('Номер телефона', blank=True)
     avatar = models.ImageField('Аватар', blank=True)
 
+    class Meta:
+        verbose_name = 'Профиль клиента'
+        verbose_name_plural = 'Профили клиентов'
+    
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):
         if created:
