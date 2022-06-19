@@ -78,7 +78,7 @@ def get_boxes_sizes(min=0, max=9999999999):
     min_rice_box = 9999999
     all_values = BoxVolume.objects.all()
     for value in all_values:
-        if min > value.volume or max < value.volume:
+        if min > value.volume or max <= value.volume:
             continue
         box_details = {}
         value_boxes = value.boxes.all()
@@ -90,5 +90,7 @@ def get_boxes_sizes(min=0, max=9999999999):
                 box_details['price'] = value_box.tariff
             min_rice_box = 9999999
         all_boxes_sizes.append(box_details)
+        if all_boxes_sizes is None:
+            return None
     print(all_boxes_sizes)
     return all_boxes_sizes
