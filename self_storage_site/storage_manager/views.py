@@ -1,15 +1,18 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
-from .forms import UserRegisterForm
+from .forms import UserRegisterForm, SaveProfileAvatarForm
 from django.http import JsonResponse
 from storage_manager.models import Box, BoxPlace, CalculateCustomer, Order
 from django.contrib.auth.models import User
 from django.db.models import Min
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
+from django.core.files.base import ContentFile
 from datetime import date
 from django.db.models import Q
 import phonenumbers
+from PIL import Image
+from io import BytesIO
 
 from .utils import randomise_from_range, get_email, get_boxes_sizes
 
@@ -83,7 +86,8 @@ def index(request):
 def personal_account(request):
     user_orders = Order.objects.filter(customer=request.user).select_related('box__boxes_place')
     for order in user_orders:
-        order.expires_soon = (order.end_date - date.today()).days < 14
+        order.expires_soon = 0 <= (order.end_date - date.today()).days < 14
+        order.expired = order.end_date < date.today()
     if request.method == 'POST':
         print(request.POST)
 
@@ -103,6 +107,18 @@ def change_user_profile(request):
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
         password = request.POST['password']
+        if request.FILES:
+            try:
+                img = Image.open(request.FILES['avatar'])
+                img.thumbnail((180, 180))
+                temp = BytesIO()
+                img.save(temp, format=img.format)
+            except Exception as exc:
+                print(exc)
+                context['message'] = 'С изображением что-то не так, попробуйте снова'
+                context['success'] = False
+                return JsonResponse(context)
+            user.profile.avatar = ContentFile(temp.getvalue(), f'{user.username}_avatar.{img.format}')
         if email and email != user.email and email != user.username:
             if User.objects.filter(Q(email=email)|Q(username=email)).exists():
                 context['message'] = 'E-mail адрес уже используется'

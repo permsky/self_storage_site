@@ -200,11 +200,26 @@ class Job(models.Model):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    first_name = models.CharField('Имя', max_length=30, blank=True)
-    last_name = models.CharField('Фамилия', max_length=30, blank=True)
-    phone_number = PhoneNumberField('Номер телефона', blank=True)
-    avatar = models.ImageField('Аватар', blank=True)
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE
+    )
+    first_name = models.CharField(
+        'Имя',
+        max_length=30,
+        blank=True
+    )
+    last_name = models.CharField(
+        'Фамилия',
+        max_length=30,
+        blank=True
+    )
+    phone_number = PhoneNumberField(
+        'Номер телефона',
+        blank=True)
+    avatar = models.ImageField(
+        'Аватар',
+        blank=True)
 
     class Meta:
         verbose_name = 'Профиль клиента'

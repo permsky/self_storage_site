@@ -73,7 +73,11 @@
 							<br>
 							<br>
 							<br>
+							{% if user.profile.avatar %}
+							<img src="{{ user.profile.avatar.url }}" class="rounded-pill mb-3" alt="">
+							{% else %}
 							<img src="{% static 'img/image10.png' %}" class="rounded-pill mb-3" alt="">
+							{% endif %}
 							{% if user.profile.first_name %}
 							<h4>{{ user.profile.first_name }} {{ user.profile.last_name }}</h4>
 							{% else %}
@@ -93,6 +97,8 @@
 								<input type="text" name="last_name" id="LAST_NAME" class="form-control fs_24 ps-2 SelfStorage__input" {% if user.profile.last_name %} value="{{ user.profile.last_name }}"{% else %} placeholder="Фамилия" {% endif %} disabled>
 								<label class="fs_24 SelfStorage_green ms-2" for="PASSWORD">Пароль</label>
 								<input type="password" name="password" id="PASSWORD" class="form-control fs_24 border: 1px ps-2 SelfStorage__input" placeholder="*********" disabled>
+								<label class="fs_24 SelfStorage_green ms-2" for="avatar">Загрузите свой аватар</label>
+    							<input  type="file" id="avatar" name="avatar" class="form-control border: 1px ps-2 SelfStorage__input" style="font-size: 20px;" accept=".jpg, .jpeg, .png" disabled>
 								<button type="submit" class="btn SelfStorage_green ps-1" id="save" style="display: none">Сохранить</button>
 								<a class="btn SelfStorage_orange ps-1" id="edit">Редактировать</a>
 								<script>
@@ -103,6 +109,7 @@
 										document.getElementById('FIRST_NAME').disabled = false
 										document.getElementById('LAST_NAME').disabled = false
 										document.getElementById('PASSWORD').disabled = false
+										document.getElementById('avatar').disabled = false
 										document.getElementById('PASSWORD').type = 'text'
 										document.getElementById('edit').style.display = 'none'
 										document.getElementById('save').style.display = 'inline-block'
@@ -113,8 +120,8 @@
 					</div>
 				</div>
 				<div class="tab-pane fade" id="Rent" role="tabpanel" aria-labelledby="Rent-tab">
-					{% if user.profile.name %}
-					<h1 class="fw-bold SelfStorage_green mb-5">Добрый день, {{ user.profile.name }}!</h1>
+					{% if user.profile.first_name %}
+					<h1 class="fw-bold SelfStorage_green mb-5">Добрый день, {{ user.profile.first_name }}!</h1>
 					{% else %}
 					<h1 class="fw-bold SelfStorage_green mb-5">Добрый день, {{ user.email }}!</h1>
 					{% endif %}
@@ -122,6 +129,8 @@
 					{% for order in orders %}
 					{% if order.expires_soon %}
 					<h4 class="SelfStorage_grey my-3">Срок Вашей аренды подходит к концу :(<br>Вы можете продлить аренду или забрать вещи до {{ order.end_date|date:"d.m.Y" }} включительно.</h4>
+					{% elif order.expired %}
+					<h4 class="SelfStorage_grey my-3">Срок Вашей аренды истек :(<br>Пожалуйста, свяжитесь с нами, чтобы продлить аренду или забрать вещи.</h4>
 					{% endif %}
 					<div class="mb-5">
 						<h4 class="SelfStorage_green">{{ order.box.boxes_place.name}}</h4>
@@ -187,22 +196,29 @@
 </footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
 <script>
+
+</script>
+<script>
 	$(document).ready(function(){
         $("#change-form").submit(function (event) {
             event.preventDefault();
-			let csrftoken = '{{ csrf_token }}'
-            $.ajax({
-                url: '{% url "profile_change" %}',
-                type: 'POST',
-				headers: { 'X-CSRFToken': csrftoken },
-                data: $('#change-form').serialize(),
-                success: function(response){
+			let myForm = document.getElementById('change-form');
+			let formData = new FormData(myForm);
+			let xhr = new XMLHttpRequest();
+			let csrftoken = '{{ csrf_token }}';
+			xhr.open('POST', '{% url "profile_change" %}');
+			xhr.setRequestHeader('X-CSRFToken', csrftoken);
+			xhr.send(formData);
+			xhr.onreadystatechange = function() {
+				if (xhr.readyState === 4) {
+					let response = JSON.parse(xhr.responseText);
+					console.log(response);
 					if (response.success === true)
-                     	window.location.reload()
+						window.location.reload()
 					else if (response.success === false)
 						alert(response.message)
 				}
-            });
+			};
         });
     });
 </script>

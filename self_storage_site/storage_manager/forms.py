@@ -1,6 +1,18 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from .models import Profile
+
+
+class SaveProfileAvatarForm(forms.ModelForm):
+    image_upload = forms.ImageField()
+    class Meta:
+        model = Profile
+        fields = ('avatar',)
+
+    def save(self):
+        user = super(SaveProfileAvatarForm, self).save(commit=False)
+        self.instance.avatar = self.cleaned_data.get('image_upload')
 
 
 class UserRegisterForm(forms.ModelForm):
@@ -10,11 +22,11 @@ class UserRegisterForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = [
+        fields = (
             'email',
             'password1',
             'password2'
-        ]
+        )
 
     def clean(self):
         super().clean()
