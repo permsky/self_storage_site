@@ -73,10 +73,9 @@ def get_email(request):
     print(customer_mail)
 
 
-def get_boxes_sizes(min=0, max=9999999999):
+def get_boxes_sizes(all_values, min=0, max=9999999999):
     all_boxes_sizes = []
     min_rice_box = 9999999
-    all_values = BoxVolume.objects.all()
     for value in all_values:
         if min > value.volume or max <= value.volume:
             continue
@@ -90,7 +89,7 @@ def get_boxes_sizes(min=0, max=9999999999):
                 box_details['price'] = value_box.tariff
             min_rice_box = 9999999
         all_boxes_sizes.append(box_details)
-        if all_boxes_sizes is None:
-            return None
+    if all_boxes_sizes is None:
+        return None
     print(all_boxes_sizes)
     return all_boxes_sizes
