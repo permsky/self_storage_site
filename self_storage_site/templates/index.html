@@ -306,8 +306,7 @@
                 data: $('#register-form').serialize(),
                 success: function(response){
 					if (response.success)
-						{alert("Вы успешно зарегистрировались!");
-                     	window.location.reload();}
+                     	window.location.reload();
 					else if (response.email)
 						alert(response.email)
 					else if (response.password1)
