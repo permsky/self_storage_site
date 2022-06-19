@@ -74,20 +74,19 @@ def get_email(request):
 
 
 def get_boxes_sizes(min=None, max=None):
-    need_sizes = {}
-    all_places = BoxPlace.objects.all()
-    for place in all_places:
-        place_boxes = place.place_boxes.all()
-        all_place_box_sizes = set()
-        for place_box in place_boxes:
-            if max:
-                if place_box.box_volume.volume <= max:
-                    all_place_box_sizes.add(place_box.box_volume.volume)
-            elif min:
-                if place_box.box_volume.volume > min:
-                    all_place_box_sizes.add(place_box.box_volume.volume)
-            else:
-                all_place_box_sizes.add(place_box.box_volume.volume)
-        need_sizes[place.id] = all_place_box_sizes
-    print(need_sizes)
-    return need_sizes
+    all_boxes_sizes = []
+    min_rice_box = 9999999
+    all_values = BoxVolume.objects.all()
+    for value in all_values:
+        box_details = {}
+        value_boxes = value.boxes.all()
+        for value_box in value_boxes:
+            if value_box.tariff < min_rice_box:
+                min_rice_box = value_box.tariff
+                box_details['id'] = value_box.pk
+                box_details['value'] = value.volume
+                box_details['price'] = value_box.tariff
+            min_rice_box = 9999999
+        all_boxes_sizes.append(box_details)
+    print(all_boxes_sizes)
+    return all_boxes_sizes

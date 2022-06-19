@@ -150,9 +150,9 @@ def boxes(request):
         get_email(request)
         return redirect('boxes')
     all_box_sizes = get_boxes_sizes()
-    less_3_box_sizes = get_boxes_sizes(0, 3)
-    less_10_box_sizes = get_boxes_sizes(0, 10)
-    more_10_box_sizes = get_boxes_sizes(10)
+    #less_3_box_sizes = get_boxes_sizes(0, 3)
+    #less_10_box_sizes = get_boxes_sizes(0, 10)
+    #more_10_box_sizes = get_boxes_sizes(10)
 
 
     all_places = BoxPlace.objects.all().prefetch_related(
@@ -161,8 +161,8 @@ def boxes(request):
     context = {
         'all_places': all_places,
         'all_box_sizes': all_box_sizes,
-        'less_3_box_sizes': less_3_box_sizes,
-        'less_10_box_sizes': less_10_box_sizes,
-        'more_10_box_sizes': more_10_box_sizes,
+        #'less_3_box_sizes': less_3_box_sizes,
+        #'less_10_box_sizes': less_10_box_sizes,
+        #'more_10_box_sizes': more_10_box_sizes,
     }
     return render(request, 'boxes.html', context)
