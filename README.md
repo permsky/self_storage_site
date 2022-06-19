@@ -28,7 +28,7 @@ pip install -r requirements.txt
   </pre>
 - Создайте базу данных и примените миграции командами:
 ```bash
-python manage.py makemigrations
+python manage.py makemigrations storage_manager
 python manage.py migrate
 ```
 - Создайте учётную запись администратора командой:
