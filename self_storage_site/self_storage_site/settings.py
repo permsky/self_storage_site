@@ -141,6 +141,10 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 
+# for deploy
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+
 LOGOUT_REDIRECT_URL = '/'
 
 # Default primary key field type
