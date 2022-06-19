@@ -84,15 +84,15 @@ class ProfileFilter(admin.SimpleListFilter):
         if self.value() == 'current':
             return queryset.filter(
                 user__orders__status='active'
-            )
+            ).distinct()
         elif self.value() == 'not_current':
             return queryset.exclude(
                 user__orders__gte=0
-            )
+            ).distinct()
         elif self.value() == 'expired':
             return queryset.filter(
                 user__orders__status='expired'
-            )
+            ).distinct()
 
 
 @admin.register(Profile)

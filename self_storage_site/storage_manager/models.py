@@ -153,6 +153,22 @@ class Order(models.Model):
             )
         self.box.in_use = True
         self.box.save()
+        if self.rental_time.time_intervals == 3:
+            Job.objects.create(
+                status='ready',
+                interval='3 месяца',
+                with_qrcode=True,
+                date_to_run=self.start_date,
+                order=self
+            )
+        if self.rental_time.time_intervals == 6:
+            Job.objects.create(
+                status='ready',
+                interval='6 месяцев',
+                with_qrcode=True,
+                date_to_run=self.start_date,
+                order=self
+            )
 
 
 class Job(models.Model):
@@ -164,7 +180,7 @@ class Job(models.Model):
     INTERVALS=[
         ('месяц', 'месяц'),
         ('2 недели', '2 недели'),
-        ('1 неделю', '1 неделю'),
+        ('неделю', 'неделю'),
         ('3 дня', '3 дня'),
         ('6 месяцев', '6 месяцев'),
         ('5 месяцев', '5 месяцев'),

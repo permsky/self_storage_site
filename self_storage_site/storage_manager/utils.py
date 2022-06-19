@@ -70,15 +70,13 @@ def get_email(request):
     customer_mail = request.GET.get('EMAIL1')
     CalculateCustomer.objects.get_or_create(
         customer_mail=customer_mail)
-    print(customer_mail)
 
 
-def get_boxes_sizes(min=0, max=9999999999):
+def get_boxes_sizes(all_values, min=0, max=9999999999):
     all_boxes_sizes = []
     min_rice_box = 9999999
-    all_values = BoxVolume.objects.all()
     for value in all_values:
-        if min > value.volume or max < value.volume:
+        if min > value.volume or max <= value.volume:
             continue
         box_details = {}
         value_boxes = value.boxes.all()
@@ -89,6 +87,8 @@ def get_boxes_sizes(min=0, max=9999999999):
                 box_details['value'] = value.volume
                 box_details['price'] = value_box.tariff
             min_rice_box = 9999999
-        all_boxes_sizes.append(box_details)
-    print(all_boxes_sizes)
+        if box_details:
+            all_boxes_sizes.append(box_details)
+    if all_boxes_sizes is None:
+        return None
     return all_boxes_sizes

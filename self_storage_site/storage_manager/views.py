@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from .forms import UserRegisterForm, SaveProfileAvatarForm
 from django.http import JsonResponse
-from storage_manager.models import Box, BoxPlace, CalculateCustomer, Order
+from storage_manager.models import (
+    Box, BoxPlace, CalculateCustomer, Order, BoxVolume)
 from django.contrib.auth.models import User
 from django.db.models import Min
 from django.contrib.auth.decorators import login_required
@@ -165,14 +166,15 @@ def boxes(request):
     if request.GET.get('EMAIL1'):
         get_email(request)
         return redirect('boxes')
-    all_box_sizes = get_boxes_sizes()
-    less_3_box_sizes = get_boxes_sizes(0, 3)
-    less_10_box_sizes = get_boxes_sizes(0, 10)
-    more_10_box_sizes = get_boxes_sizes(10)
 
-
+    all_values = BoxVolume.objects.all()
     all_places = BoxPlace.objects.all().prefetch_related(
         'place_boxes').get_free_boxes().get_min_price()
+
+    all_box_sizes = get_boxes_sizes(all_values)
+    less_3_box_sizes = get_boxes_sizes(all_values, 0, 3)
+    less_10_box_sizes = get_boxes_sizes(all_values, 0, 10)
+    more_10_box_sizes = get_boxes_sizes(all_values, 10)
 
     context = {
         'all_places': all_places,
