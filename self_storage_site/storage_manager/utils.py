@@ -71,3 +71,23 @@ def get_email(request):
     CalculateCustomer.objects.get_or_create(
         customer_mail=customer_mail)
     print(customer_mail)
+
+
+def get_boxes_sizes(min=None, max=None):
+    need_sizes = {}
+    all_places = BoxPlace.objects.all()
+    for place in all_places:
+        place_boxes = place.place_boxes.all()
+        all_place_box_sizes = set()
+        for place_box in place_boxes:
+            if max:
+                if place_box.box_volume.volume <= max:
+                    all_place_box_sizes.add(place_box.box_volume.volume)
+            elif min:
+                if place_box.box_volume.volume > min:
+                    all_place_box_sizes.add(place_box.box_volume.volume)
+            else:
+                all_place_box_sizes.add(place_box.box_volume.volume)
+        need_sizes[place.id] = all_place_box_sizes
+    print(need_sizes)
+    return need_sizes
