@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from .forms import UserRegisterForm
@@ -11,11 +13,19 @@ from django.contrib.auth import update_session_auth_hash
 from django.core.files.base import ContentFile
 from datetime import date
 from django.db.models import Q
+from email.mime.image import MIMEImage
+from django.core.mail import EmailMultiAlternatives
 import phonenumbers
 from PIL import Image
 from io import BytesIO
 
-from .utils import randomise_from_range, get_email, get_boxes_sizes
+import self_storage_site.settings
+from .utils import (
+    randomise_from_range,
+    get_email,
+    get_boxes_sizes,
+    create_qrcode
+)
 
 
 def register(request):
@@ -184,3 +194,39 @@ def boxes(request):
         'more_10_box_sizes': more_10_box_sizes,
     }
     return render(request, 'boxes.html', context)
+
+
+def send_qrcode(request, pk):
+    order = Order.objects.get(pk=pk)
+    message = f'Заказ от {order.start_date.strftime("%d.%m.%Y")}'
+    email = EmailMultiAlternatives(
+        subject='Оповещение от сервиса SelfStorage',
+        body=message,
+        from_email=self_storage_site.settings.EMAIL_HOST_USER,
+        to=[order.customer.email]
+    )
+    image_path = create_qrcode(order.access_code)
+    image_name = Path(image_path).name
+    html_content = f'''
+    <!doctype html>
+        <html lang=en>
+            <head>
+                <meta charset=utf-8>
+            </head>
+            <body>
+                <p>
+                QR-код для доступа к ячейке №{order.box.id}.<br>
+                <img src='cid:{image_name}'/>
+                </p>
+            </body>
+        </html>
+    '''
+    email.attach_alternative(html_content, "text/html")
+    email.content_subtype = 'html'
+    email.mixed_subtype = 'related'
+    with open(image_path, mode='rb') as f:
+        image = MIMEImage(f.read())
+        email.attach(image)
+        image.add_header('Content-ID', f"<{image_name}>")
+    email.send()
+    return redirect('profile')
