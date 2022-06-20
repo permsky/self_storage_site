@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
-from .forms import UserRegisterForm, SaveProfileAvatarForm
+from .forms import UserRegisterForm
 from django.http import JsonResponse
 from storage_manager.models import (
     Box, BoxPlace, CalculateCustomer, Order, BoxVolume)
