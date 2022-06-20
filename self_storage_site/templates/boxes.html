@@ -36,6 +36,28 @@
 		</div>
 	</div>
 </aside>
+<aside class="modal fade" id="OrderModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-scrollable modal-fullscreen">
+		<div class="modal-content">
+			<div class="modal-header border-0">
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body d-flex justify-content-center align-items-center">
+				<form id="order-create" class="d-flex flex-column align-items-center" style="max-width: 420px">
+					<h1 class="modal-title text-center fw-bold mb-3">Создайте заказ</h1>
+					<input type="text" id="box_field" required name="box" class="form-control  border-8 mb-4 py-3 px-5 border-0 fs_24 SelfStorage__bg_lightgrey" disabled>
+					<select id="period" name="period" style="color: #70747c;" class="form-control  border-8 mb-4 py-3 px-5 border-0 fs_24 SelfStorage__bg_lightgrey">
+    					<option value="" disabled selected hidden>Выберите срок аренды</option>
+						<option value="3">3 месяца</option>
+    					<option value="6">6 месяцев</option>
+  					</select>
+					<button class="btn border-8 py-3 px-5 mt-5 mb-3 w-100 text-white fs_24 SelfStorage__bg_orange SelfStorage__btn2_orange">Сделать заказ</button>
+					<span>Вы сможете произвести оплату в личном кабинете</span>
+				</form>
+			</div>
+		</div>
+	</div>
+</aside>
 <aside class="modal fade" id="SignModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-scrollable modal-fullscreen">
 		<div class="modal-content">
@@ -341,7 +363,7 @@
 			<div class="tab-pane fade show active" id="pills-all" role="tabpanel" aria-labelledby="pills-home-tab">
                 {% for box in all_box_sizes%}
 					{% if forloop.counter < 4 %}
-						<a href="#" class="row text-decoration-none py-3 px-4 mt-5 SelfStorage__boxlink">
+						<a href="#" data-bs-toggle="modal" data-bs-target="#OrderModal" data-box_id = {{ box.id }} onclick="box_click(this)" class="row text-decoration-none py-3 px-4 mt-5 SelfStorage__boxlink">
 							<div class="col-12 col-md-4 col-lg-3 d-flex justify-content-center align-items-center">
 								<span class="fs_24">№{{ box.id }}</span>
 							</div>
@@ -360,7 +382,7 @@
 				<div class="collapse" id="collapse-all">
 					{% for box in all_box_sizes%}
 						{% if forloop.counter > 3 %}
-							<a href="#" class="row text-decoration-none py-3 px-4 mt-5 SelfStorage__boxlink">
+							<a href="#" data-bs-toggle="modal" data-bs-target="#OrderModal" data-box_id = {{ box.id }} onclick="box_click(this)" class="row text-decoration-none py-3 px-4 mt-5 SelfStorage__boxlink">
 								<div class="col-12 col-md-4 col-lg-3 d-flex justify-content-center align-items-center">
 									<span class="fs_24">№{{ box.id }}</span>
 								</div>
@@ -386,7 +408,7 @@
 			</div>
 			<div class="tab-pane fade" id="pills-to3" role="tabpanel" aria-labelledby="pills-profile-tab">
 				{% for box in less_3_box_sizes %}
-					<a href="#" class="row text-decoration-none py-3 px-4 mt-5 SelfStorage__boxlink">
+					<a href="#" data-bs-toggle="modal" data-bs-target="#OrderModal" data-box_id = {{ box.id }} onclick="box_click(this)" class="row text-decoration-none py-3 px-4 mt-5 SelfStorage__boxlink">
 						<div class="col-12 col-md-4 col-lg-3 d-flex justify-content-center align-items-center">
 							<span class="fs_24">№{{ box.id }}</span>
 						</div>
@@ -405,7 +427,7 @@
 			<div class="tab-pane fade" id="pills-to10" role="tabpanel" aria-labelledby="pills-contact-tab">
 				{% for box in less_10_box_sizes%}
 					{% if forloop.counter < 4 %}
-						<a href="#" class="row text-decoration-none py-3 px-4 mt-5 SelfStorage__boxlink">
+						<a href="#" data-bs-toggle="modal" data-bs-target="#OrderModal" data-box_id = {{ box.id }} onclick="box_click(this)" class="row text-decoration-none py-3 px-4 mt-5 SelfStorage__boxlink">
 							<div class="col-12 col-md-4 col-lg-3 d-flex justify-content-center align-items-center">
 								<span class="fs_24">№{{ box.id }}</span>
 							</div>
@@ -424,7 +446,7 @@
 				<div class="collapse" id="collapse-to10">
 					{% for box in less_10_box_sizes%}
 						{% if forloop.counter > 3 %}
-							<a href="#" class="row text-decoration-none py-3 px-4 mt-5 SelfStorage__boxlink">
+							<a href="#" data-bs-toggle="modal" data-bs-target="#OrderModal" data-box_id = {{ box.id }} onclick="box_click(this)" class="row text-decoration-none py-3 px-4 mt-5 SelfStorage__boxlink">
 								<div class="col-12 col-md-4 col-lg-3 d-flex justify-content-center align-items-center">
 									<span class="fs_24">№{{ box.id }}</span>
 								</div>
@@ -450,7 +472,7 @@
 			</div>
 			<div class="tab-pane fade" id="pills-from10" role="tabpanel" aria-labelledby="pills-contact-tab">
 				{% for box in more_10_box_sizes%}
-					<a href="#" class="row text-decoration-none py-3 px-4 mt-5 SelfStorage__boxlink">
+					<a href="#" data-bs-toggle="modal" data-bs-target="#OrderModal" data-box_id = {{ box.id }} onclick="box_click(this)" class="row text-decoration-none py-3 px-4 mt-5 SelfStorage__boxlink">
 						<div class="col-12 col-md-4 col-lg-3 d-flex justify-content-center align-items-center">
 							<span class="fs_24">№{{ box.id }}</span>
 						</div>
@@ -472,6 +494,9 @@
 {% include "includes/footer.html" %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
 <script>
+	function box_click(box) {
+		document.getElementById('box_field').value = "Бокс №" + box.getAttribute('data-box_id');
+	}
     $(document).ready(function(){
         $("#register-form").submit(function (event) {
             event.preventDefault();
