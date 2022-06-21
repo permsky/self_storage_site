@@ -105,7 +105,7 @@ class Order(models.Model):
         on_delete=models.CASCADE,
         related_name='orders',
         verbose_name='Имя клиента')
-    box = models.OneToOneField(
+    box = models.ForeignKey(
         Box,
         on_delete=models.PROTECT,
         related_name='box_orders',
