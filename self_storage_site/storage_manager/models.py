@@ -96,7 +96,8 @@ class Order(models.Model):
     STATUSES = [
         ('active', 'active'),
         ('expired', 'expired'),
-        ('closed', 'closed')
+        ('closed', 'closed'),
+        ('not_paid', 'not_paid')
     ]
     customer = models.ForeignKey(
         User,
