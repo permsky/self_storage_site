@@ -100,8 +100,9 @@ def index(request):
 
 @login_required
 def personal_account(request):
-    print(request.__dict__)
-    user_orders = Order.objects.filter(customer=request.user).select_related('box__boxes_place')
+    if 'order' in request.session:
+        print('OOOOOOOOOOOOOOOOOOO')
+    user_orders = Order.objects.filter(customer=request.user).exclude(status='not_paid').select_related('box__boxes_place')
     for order in user_orders:
         order.expires_soon = 0 <= (order.end_date - date.today()).days < 14
         order.expired = order.end_date < date.today()
