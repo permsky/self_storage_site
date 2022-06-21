@@ -1,5 +1,4 @@
 from dateutil.relativedelta import *
-from datetime import timedelta
 
 from django.contrib import admin
 from django.utils.safestring import mark_safe

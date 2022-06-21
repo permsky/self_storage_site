@@ -144,7 +144,7 @@ def make_order(request):
             box=box,
             start_date=start_date,
             end_date=end_date,
-            status='active'
+            status='not_paid'
         )
         new_order.save()
         context['success'] = True
