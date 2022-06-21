@@ -1,3 +1,4 @@
+from datetime import timedelta
 from pathlib import Path
 
 from django.shortcuts import get_object_or_404
@@ -285,3 +286,15 @@ def pay_order(request, order_id):
     order.save()
     return redirect(payment['url'])
 
+
+def prolong(request, pk):
+    order = Order.objects.get(pk=pk)
+    Order.objects.create(
+        customer=order.customer,
+        box=order.box,
+        rental_time=order.rental_time,
+        start_date=order.end_date + timedelta(days=1),
+        access_code=order.access_code,
+        status='not_paid'
+    )
+    return redirect('profile')
