@@ -48,8 +48,9 @@
 					<input type="text" id="box_field" required name="box" class="form-control  border-8 mb-4 py-3 px-5 border-0 fs_24 SelfStorage__bg_lightgrey" readonly>
 					<select id="period" required name="period" style="color: #70747c;" class="form-control  border-8 mb-4 py-3 px-5 border-0 fs_24 SelfStorage__bg_lightgrey">
     					<option value="" disabled selected hidden>Выберите срок аренды</option>
-						<option value="3">3 месяца</option>
-    					<option value="6">6 месяцев</option>
+						{% for time in rental_times %}
+						<option value="{{ time }}" > {{ time }} месяц(ев)</option>
+    					{% endfor %}
   					</select>
 					<p id="price_text"></p>
 					<button class="btn border-8 py-3 px-5 mt-5 mb-3 w-100 text-white fs_24 SelfStorage__bg_orange SelfStorage__btn2_orange">Сделать заказ</button>
@@ -572,7 +573,8 @@
                 data: $('#order-create').serialize(),
                 success: function(response){
 					if (response.success === true)
-                     	window.location.href = '{% url "profile" %}';
+					{let order_id = response.order_id;
+                     	window.location.href = '{% url "payment" 111 %}'.replace(/111/,order_id);}
 					else if (response.success === false)
 						alert(response.message)
 				}
