@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from .forms import UserRegisterForm
@@ -27,7 +28,8 @@ from .utils import (
     randomise_from_range,
     get_email,
     get_boxes_sizes,
-    create_qrcode
+    create_qrcode,
+    create_payment,
 )
 
 
@@ -272,3 +274,17 @@ def send_qrcode(request, pk):
         image.add_header('Content-ID', f"<{image_name}>")
     email.send()
     return redirect('profile')
+
+
+def pay_order(request, order_id):
+    order = get_object_or_404(Order, pk=order_id)
+    rental_time = order.rental_time.time_intervals
+    tariff = order.box.tariff
+    amount = tariff * rental_time
+    redirect_url = request.build_absolute_uri('/profile/')
+    payment = create_payment(amount, redirect_url)
+    print(payment)
+    order.status = 'active'
+    order.save()
+    return redirect(payment['url'])
+

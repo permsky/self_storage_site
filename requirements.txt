@@ -12,3 +12,4 @@ django-phonenumber-field==6.2.0
 phonenumbers==8.12.50
 sorl-thumbnail==12.8.0
 python-dateutil==2.8.2
+yookassa==2.3.1
