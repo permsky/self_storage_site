@@ -17,5 +17,5 @@ urlpatterns = [
     path('profile/<int:pk>/', views.send_qrcode, name='send_qrcode'),
     path('createorder/', views.make_order, name='create_order'),
     path('orderpay/<int:order_id>/', views.pay_order, name='payment'),
-    path('order/<int:pk>/', views.prolong, name='prolong'),
+    path('boxes/<int:pk>/', views.prolong, name='prolong'),
     ]

@@ -307,7 +307,7 @@ def prolong(request, pk):
         rental_time=order.rental_time,
         start_date=order.end_date + timedelta(days=1),
         access_code=order.access_code,
-        status='not_paid'
+        status='not_paid',
+        payment_id=' '
     )
-    pay_order(request, new_order.id)
-    return redirect('profile')
+    return pay_order(request, new_order.id)
