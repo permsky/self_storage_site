@@ -84,6 +84,8 @@ def get_boxes_sizes(all_values, min=0, max=9999999999):
         box_details = {}
         value_boxes = value.boxes.all()
         for value_box in value_boxes:
+            if value_box. in_use:
+                continue
             if value_box.tariff < min_rice_box:
                 min_rice_box = value_box.tariff
                 box_details['id'] = value_box.pk
