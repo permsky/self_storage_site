@@ -122,6 +122,7 @@ class Order(models.Model):
         choices=STATUSES,
         max_length=10
     )
+    payment_id = models.CharField(max_length=100, blank=True)
 
     class Meta:
         verbose_name = 'Заказ'

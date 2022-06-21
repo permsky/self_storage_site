@@ -31,6 +31,7 @@ from .utils import (
     get_boxes_sizes,
     create_qrcode,
     create_payment,
+    check_payment,
 )
 
 
@@ -101,8 +102,14 @@ def index(request):
 
 @login_required
 def personal_account(request):
-    if 'order' in request.session:
-        print('OOOOOOOOOOOOOOOOOOO')
+    if request.GET.get('tryed_to_pay'):
+        order_id = request.GET.get('tryed_to_pay')
+        order = get_object_or_404(Order, pk=order_id)
+        print(order.payment_id)
+        payment_check = check_payment(order.payment_id)
+        if payment_check:
+            order.status = 'active'
+            order.save()
     user_orders = Order.objects.filter(customer=request.user).exclude(status='not_paid').select_related('box__boxes_place')
     for order in user_orders:
         order.expires_soon = 0 <= (order.end_date - date.today()).days < 14
@@ -279,10 +286,10 @@ def pay_order(request, order_id):
     rental_time = order.rental_time.time_intervals
     tariff = order.box.tariff
     amount = tariff * rental_time
-    redirect_url = request.build_absolute_uri('/profile/')
+    redirect_url = request.build_absolute_uri(f'/profile?tryed_to_pay={order_id}')
     payment = create_payment(amount, redirect_url)
     print(payment)
-    order.status = 'active'
+    order.payment_id = payment['id']
     order.save()
     return redirect(payment['url'])
 
