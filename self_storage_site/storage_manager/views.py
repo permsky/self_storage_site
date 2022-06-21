@@ -134,16 +134,11 @@ def make_order(request):
             context['message'] = 'Этот бокс уже занят, выберите другой'
             context['success'] = False
             return JsonResponse(context)
-        time_interval = rental_time.time_intervals
-        time_delta = relativedelta(months=+time_interval)
-        start_date = date.today()
-        end_date = start_date+time_delta
         new_order = Order(
             customer=request.user,
             rental_time=rental_time,
             box=box,
-            start_date=start_date,
-            end_date=end_date,
+            start_date=date.today(),
             status='not_paid'
         )
         new_order.save()

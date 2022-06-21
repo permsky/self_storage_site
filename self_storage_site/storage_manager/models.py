@@ -7,6 +7,7 @@ from django.db.models import Sum, Min
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from phonenumber_field.modelfields import PhoneNumberField
+from dateutil.relativedelta import *
 
 
 User = get_user_model()
@@ -130,6 +131,9 @@ class Order(models.Model):
         return f'Заказ {self.pk} клиента {self.customer.first_name} от {str(self.start_date)}'
     
     def save(self, *args, **kwargs):
+        time_interval = self.rental_time.time_intervals
+        time_delta = relativedelta(months=+time_interval)
+        self.end_date = self.start_date + time_delta
         super().save(*args, **kwargs)
         intervals = [
             'месяц',
@@ -233,10 +237,12 @@ class Profile(models.Model):
     )
     phone_number = PhoneNumberField(
         'Номер телефона',
-        blank=True)
+        blank=True
+    )
     avatar = models.ImageField(
         'Аватар',
-        blank=True)
+        blank=True
+    )
 
     class Meta:
         verbose_name = 'Профиль клиента'

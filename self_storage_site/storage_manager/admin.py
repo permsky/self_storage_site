@@ -54,12 +54,6 @@ class OrderAdmin(admin.ModelAdmin):
         'status',
     ]
 
-    def save_model(self, request, obj, form, change):
-        time_interval = obj.rental_time.time_intervals
-        time_delta = relativedelta(months=+time_interval)
-        obj.end_date = obj.start_date+time_delta
-        super().save_model(request, obj, form, change)
-
 
 @admin.register(Job)
 class JobAdmin(admin.ModelAdmin):
