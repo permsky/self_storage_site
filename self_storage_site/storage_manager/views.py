@@ -289,7 +289,7 @@ def pay_order(request, order_id):
 
 def prolong(request, pk):
     order = Order.objects.get(pk=pk)
-    Order.objects.create(
+    new_order = Order.objects.create(
         customer=order.customer,
         box=order.box,
         rental_time=order.rental_time,
@@ -297,4 +297,5 @@ def prolong(request, pk):
         access_code=order.access_code,
         status='not_paid'
     )
+    pay_order(request, new_order.id)
     return redirect('profile')
