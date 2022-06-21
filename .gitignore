@@ -9,3 +9,5 @@ env
 # media
 media
 *migrations
+# qr codes
+qrcodes
