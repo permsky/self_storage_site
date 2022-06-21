@@ -1,3 +1,6 @@
+from dateutil.relativedelta import *
+from datetime import timedelta
+
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 
@@ -42,6 +45,7 @@ class RentalTimeAdmin(admin.ModelAdmin):
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_filter = ['status']
+    readonly_fields = ['end_date']
     list_display = [
         'customer',
         'box',
@@ -50,6 +54,13 @@ class OrderAdmin(admin.ModelAdmin):
         'end_date',
         'status',
     ]
+
+    def save_model(self, request, obj, form, change):
+        time_interval = obj.rental_time.time_intervals
+        time_delta = relativedelta(months=+time_interval)
+        print(time_interval, time_delta)
+        obj.end_date = obj.start_date+time_delta
+        super().save_model(request, obj, form, change)
 
 
 @admin.register(Job)
