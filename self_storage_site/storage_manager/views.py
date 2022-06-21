@@ -146,6 +146,7 @@ def make_order(request):
         )
         new_order.save()
         context['success'] = True
+        context['order_id'] = new_order.pk
         return JsonResponse(context)
         
 
@@ -219,6 +220,9 @@ def boxes(request):
         get_email(request)
         return redirect('boxes')
 
+    rental_times = list(RentalTime.objects.all())
+    for i in rental_times:
+        print(i)
     all_values = BoxVolume.objects.all()
     all_places = BoxPlace.objects.all().prefetch_related(
         'place_boxes').get_free_boxes().get_min_price()
@@ -234,6 +238,7 @@ def boxes(request):
         'less_3_box_sizes': less_3_box_sizes,
         'less_10_box_sizes': less_10_box_sizes,
         'more_10_box_sizes': more_10_box_sizes,
+        'rental_times': rental_times,
     }
     return render(request, 'boxes.html', context)
 
