@@ -177,7 +177,7 @@ class Job(models.Model):
         ('ready', 'ready'),
         ('done', 'done')
     ]
-    INTERVALS=[
+    INTERVALS = [
         ('месяц', 'месяц'),
         ('2 недели', '2 недели'),
         ('неделю', 'неделю'),

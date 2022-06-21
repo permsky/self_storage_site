@@ -14,5 +14,6 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('login/', views.sign_in, name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
-    path('profile/<int:pk>/', views.send_qrcode, name='send_qrcode')
+    path('profile/<int:pk>/', views.send_qrcode, name='send_qrcode'),
+    path('createorder/', views.make_order, name='create_order'),
 ]

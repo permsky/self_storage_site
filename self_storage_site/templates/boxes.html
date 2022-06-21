@@ -45,8 +45,8 @@
 			<div class="modal-body d-flex justify-content-center align-items-center">
 				<form id="order-create" class="d-flex flex-column align-items-center" style="max-width: 420px">
 					<h1 class="modal-title text-center fw-bold mb-3">Создайте заказ</h1>
-					<input type="text" id="box_field" required name="box" class="form-control  border-8 mb-4 py-3 px-5 border-0 fs_24 SelfStorage__bg_lightgrey" disabled>
-					<select id="period" name="period" style="color: #70747c;" class="form-control  border-8 mb-4 py-3 px-5 border-0 fs_24 SelfStorage__bg_lightgrey">
+					<input type="text" id="box_field" required name="box" class="form-control  border-8 mb-4 py-3 px-5 border-0 fs_24 SelfStorage__bg_lightgrey" readonly>
+					<select id="period" required name="period" style="color: #70747c;" class="form-control  border-8 mb-4 py-3 px-5 border-0 fs_24 SelfStorage__bg_lightgrey">
     					<option value="" disabled selected hidden>Выберите срок аренды</option>
 						<option value="3">3 месяца</option>
     					<option value="6">6 месяцев</option>
@@ -364,7 +364,11 @@
 			<div class="tab-pane fade show active" id="pills-all" role="tabpanel" aria-labelledby="pills-home-tab">
                 {% for box in all_box_sizes%}
 					{% if forloop.counter < 4 %}
+						{% if user.is_authenticated %}
 						<a href="#" data-bs-toggle="modal" data-bs-target="#OrderModal" data-price={{ box.price }} data-box_id={{ box.id }} onclick="box_click(this)" class="row text-decoration-none py-3 px-4 mt-5 SelfStorage__boxlink">
+						{% else %}
+						<a href="#" data-bs-toggle="modal" data-bs-target="#SignModal" data-price={{ box.price }} data-box_id={{ box.id }} onclick="box_click(this)" class="row text-decoration-none py-3 px-4 mt-5 SelfStorage__boxlink">
+						{% endif %}
 							<div class="col-12 col-md-4 col-lg-3 d-flex justify-content-center align-items-center">
 								<span class="fs_24">№{{ box.id }}</span>
 							</div>
@@ -383,7 +387,11 @@
 				<div class="collapse" id="collapse-all">
 					{% for box in all_box_sizes%}
 						{% if forloop.counter > 3 %}
+							{% if user.is_authenticated %}
 							<a href="#" data-bs-toggle="modal" data-bs-target="#OrderModal" data-price={{ box.price }} data-box_id={{ box.id }} onclick="box_click(this)" class="row text-decoration-none py-3 px-4 mt-5 SelfStorage__boxlink">
+							{% else %}
+							<a href="#" data-bs-toggle="modal" data-bs-target="#SignModal" data-price={{ box.price }} data-box_id={{ box.id }} onclick="box_click(this)" class="row text-decoration-none py-3 px-4 mt-5 SelfStorage__boxlink">
+							{% endif %}
 								<div class="col-12 col-md-4 col-lg-3 d-flex justify-content-center align-items-center">
 									<span class="fs_24">№{{ box.id }}</span>
 								</div>
@@ -409,7 +417,11 @@
 			</div>
 			<div class="tab-pane fade" id="pills-to3" role="tabpanel" aria-labelledby="pills-profile-tab">
 				{% for box in less_3_box_sizes %}
+					{% if user.is_authenticated %}
 					<a href="#" data-bs-toggle="modal" data-bs-target="#OrderModal" data-price={{ box.price }} data-box_id={{ box.id }} onclick="box_click(this)" class="row text-decoration-none py-3 px-4 mt-5 SelfStorage__boxlink">
+					{% else %}
+					<a href="#" data-bs-toggle="modal" data-bs-target="#SignModal" data-price={{ box.price }} data-box_id={{ box.id }} onclick="box_click(this)" class="row text-decoration-none py-3 px-4 mt-5 SelfStorage__boxlink">
+					{% endif %}
 						<div class="col-12 col-md-4 col-lg-3 d-flex justify-content-center align-items-center">
 							<span class="fs_24">№{{ box.id }}</span>
 						</div>
@@ -428,7 +440,11 @@
 			<div class="tab-pane fade" id="pills-to10" role="tabpanel" aria-labelledby="pills-contact-tab">
 				{% for box in less_10_box_sizes%}
 					{% if forloop.counter < 4 %}
+						{% if user.is_authenticated %}
 						<a href="#" data-bs-toggle="modal" data-bs-target="#OrderModal" data-price={{ box.price }} data-box_id={{ box.id }} onclick="box_click(this)" class="row text-decoration-none py-3 px-4 mt-5 SelfStorage__boxlink">
+						{% else %}
+						<a href="#" data-bs-toggle="modal" data-bs-target="#SignModal" data-price={{ box.price }} data-box_id={{ box.id }} onclick="box_click(this)" class="row text-decoration-none py-3 px-4 mt-5 SelfStorage__boxlink">
+						{% endif %}
 							<div class="col-12 col-md-4 col-lg-3 d-flex justify-content-center align-items-center">
 								<span class="fs_24">№{{ box.id }}</span>
 							</div>
@@ -447,7 +463,11 @@
 				<div class="collapse" id="collapse-to10">
 					{% for box in less_10_box_sizes%}
 						{% if forloop.counter > 3 %}
+							{% if user.is_authenticated %}
 							<a href="#" data-bs-toggle="modal" data-bs-target="#OrderModal" data-price={{ box.price }} data-box_id={{ box.id }} onclick="box_click(this)" class="row text-decoration-none py-3 px-4 mt-5 SelfStorage__boxlink">
+							{% else %}
+							<a href="#" data-bs-toggle="modal" data-bs-target="#SignModal" data-price={{ box.price }} data-box_id={{ box.id }} onclick="box_click(this)" class="row text-decoration-none py-3 px-4 mt-5 SelfStorage__boxlink">
+							{% endif %}
 								<div class="col-12 col-md-4 col-lg-3 d-flex justify-content-center align-items-center">
 									<span class="fs_24">№{{ box.id }}</span>
 								</div>
@@ -473,7 +493,11 @@
 			</div>
 			<div class="tab-pane fade" id="pills-from10" role="tabpanel" aria-labelledby="pills-contact-tab">
 				{% for box in more_10_box_sizes%}
+					{% if user.is_authenticated %}
 					<a href="#" data-bs-toggle="modal" data-bs-target="#OrderModal" data-price={{ box.price }} data-box_id={{ box.id }} onclick="box_click(this)" class="row text-decoration-none py-3 px-4 mt-5 SelfStorage__boxlink">
+					{% else %}
+					<a href="#" data-bs-toggle="modal" data-bs-target="#SignModal" data-price={{ box.price }} data-box_id={{ box.id }} onclick="box_click(this)" class="row text-decoration-none py-3 px-4 mt-5 SelfStorage__boxlink">
+					{% endif %}
 						<div class="col-12 col-md-4 col-lg-3 d-flex justify-content-center align-items-center">
 							<span class="fs_24">№{{ box.id }}</span>
 						</div>
@@ -531,6 +555,24 @@
                 success: function(response){
 					if (response.success === true)
                      	window.location.reload()
+					else if (response.success === false)
+						alert(response.message)
+				}
+            });
+        });
+    });
+	$(document).ready(function(){
+        $("#order-create").submit(function (event) {
+            event.preventDefault();
+			let csrftoken = '{{ csrf_token }}'
+            $.ajax({
+                url: '{% url "create_order" %}',
+                type: 'POST',
+				headers: { 'X-CSRFToken': csrftoken },
+                data: $('#order-create').serialize(),
+                success: function(response){
+					if (response.success === true)
+                     	window.location.href = '{% url "profile" %}';
 					else if (response.success === false)
 						alert(response.message)
 				}

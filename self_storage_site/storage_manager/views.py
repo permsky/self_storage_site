@@ -5,12 +5,13 @@ from django.contrib.auth import authenticate, login
 from .forms import UserRegisterForm
 from django.http import JsonResponse
 from storage_manager.models import (
-    Box, BoxPlace, CalculateCustomer, Order, BoxVolume)
+    Box, BoxPlace, CalculateCustomer, Order, BoxVolume, RentalTime)
 from django.contrib.auth.models import User
 from django.db.models import Min
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
 from django.core.files.base import ContentFile
+from django.http import Http404
 from datetime import date
 from django.db.models import Q
 from email.mime.image import MIMEImage
@@ -18,6 +19,8 @@ from django.core.mail import EmailMultiAlternatives
 import phonenumbers
 from PIL import Image
 from io import BytesIO
+from dateutil.relativedelta import *
+
 
 import self_storage_site.settings
 from .utils import (
@@ -106,6 +109,45 @@ def personal_account(request):
         'orders': user_orders
     }
     return render(request, 'personal_account.html', context)
+
+
+@login_required
+def make_order(request):
+    if request.method == "POST":
+        context = {}
+        print(request.POST)
+        box_name: str = request.POST['box']
+        time_period = int(request.POST['period'])
+        box_id = box_name.rsplit('№')[1]
+        print(time_period)
+        try:
+            rental_time = RentalTime.objects.get(time_intervals=time_period)
+        except RentalTime.DoesNotExist:
+            context['message'] = 'Указан несуществующий временной интервал'
+            context['success'] = False
+            return JsonResponse(context)
+        try:
+            box = Box.objects.get(pk=box_id, box_orders__isnull=True)
+        except Box.DoesNotExist:
+            context['message'] = 'Этот бокс уже занят, выберите другой'
+            context['success'] = False
+            return JsonResponse(context)
+        time_interval = rental_time.time_intervals
+        time_delta = relativedelta(months=+time_interval)
+        start_date = date.today()
+        end_date = start_date+time_delta
+        new_order = Order(
+            customer=request.user,
+            rental_time=rental_time,
+            box=box,
+            start_date=start_date,
+            end_date=end_date,
+            status='active'
+        )
+        new_order.save()
+        context['success'] = True
+        return JsonResponse(context)
+        
 
 
 @login_required
